@@ -6,6 +6,8 @@ public class Usuario {
     private long cpf; //NUMERIC(13) em Java vira long
     private String nome;
     private LocalDate data_nascimento; //Date vira Local Date
+    private String email;
+    private String telefone;
     private String login;
     private String senha;
 
@@ -13,10 +15,12 @@ public class Usuario {
     public Usuario(){
 
     }
-    public Usuario(long cpf, String nome, LocalDate data_nascimento, String login, String senha) {
+    public Usuario(long cpf, String nome, LocalDate data_nascimento, String email, String telefone, String login, String senha) {
         this.cpf = cpf;
         this.nome = nome;
         this.data_nascimento = data_nascimento;
+        this.email = email;
+        this.telefone = telefone;
         this.login = login;
         this.senha = senha;
     }
@@ -39,6 +43,18 @@ public class Usuario {
     }
     public void setData_nascimento(LocalDate data_nascimento) {
         this.data_nascimento = data_nascimento;
+    }
+    public void setEmail(String email){
+        this.email = email;
+    }
+    public String getEmail(){
+        return email;
+    }
+    public void setTelefone(String telefone){
+        this.telefone = telefone;
+    }
+    public String getTelefone(){
+        return telefone;
     }
     public String getLogin() {
         return login;
