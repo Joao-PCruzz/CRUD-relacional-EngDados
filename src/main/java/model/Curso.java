@@ -1,0 +1,72 @@
+package model;
+
+public class Curso{
+    private int idCurso;
+    private String nome;
+    private String grau; //Grau está em um domínio "tipo_grau" precisa-se ver como implementar isso no java
+    private String turno; //mesma coisa, está no "tipo_turno"
+    private String campus;
+    private String nível; //está no "tipo_nivel"
+
+    //Constrututores
+    public Curso() {
+    }
+    public Curso(int idCurso, String nome, String grau, String turno, String campus, String nível) {
+        this.idCurso = idCurso;
+        this.nome = nome;
+        this.grau = grau;
+        this.turno = turno;
+        this.campus = campus;
+        this.nível = nível;
+    }
+
+    //Metodos Getters and Setters
+    public int getIdCurso() {
+        return idCurso;
+    }
+    public void setIdCurso(int idCurso) {
+        this.idCurso = idCurso;
+    }
+    public String getNome() {
+        return nome;
+    }
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+    public String getGrau() {
+        return grau;
+    }
+    public void setGrau(String grau) {
+        this.grau = grau;
+    }
+    public String getTurno() {
+        return turno;
+    }
+    public void setTurno(String turno) {
+        this.turno = turno;
+    }
+    public String getCampus() {
+        return campus;
+    }
+    public void setCampus(String campus) {
+        this.campus = campus;
+    }
+    public String getNível() {
+        return nível;
+    }
+    public void setNível(String nível) {
+        this.nível = nível;
+    }
+
+    @Override
+    public String toString() {
+        return "Curso{" +
+                "idCurso=" + idCurso +
+                ", nome='" + nome + '\'' +
+                ", grau='" + grau + '\'' +
+                ", turno='" + turno + '\'' +
+                ", campus='" + campus + '\'' +
+                ", nível='" + nível + '\'' +
+                '}';
+    }
+}
