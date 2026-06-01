@@ -3,14 +3,13 @@ package dao; //Esse package é responsável por implementar todas as funções d
 import java.sql.*;
 import java.time.LocalDate;
 import model.Usuario;
-
 import conexao.ConnectionFactory;
 
 public class UsuarioDAO {
 
     //Método para CRIAR
     public void inserirUsuario(Usuario usuario) throws SQLException {
-        String sql = "INSERT INTO universidade.usuario (cpf, nome, data_nascimento, login, senha) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO universidade.usuario( cpf, nome, data_nascimento, email, telefone, login, senha) VALUES (?, ?, ?, ?, ?, ?, ?);";
 
         try(Connection conexao = ConnectionFactory.getConnection();
             PreparedStatement comando = conexao.prepareStatement(sql)){
@@ -20,8 +19,13 @@ public class UsuarioDAO {
                 comando.setLong(1, usuario.getCpf());
                 comando.setString(2, usuario.getNome());
                 comando.setDate(3, java.sql.Date.valueOf(usuario.getData_nascimento())); // Converte LocalDate para o tipo Date do SQL
-                comando.setString(4, usuario.getEmail());
-                comando.setString(5, usuario.getTelefone());
+                //Primeiro é necessário converter o email e telefone em array para ser possível passar para a mascara '?'
+                //O método createArrayOf converte a lista para um array nativo em SQL
+                Array arrayEmail = conexao.createArrayOf("VARCHAR", usuario.getEmail().toArray());
+                comando.setArray(4, arrayEmail);
+                Array arrayTelefone = conexao.createArrayOf("VARCHAR", usuario.getTelefone().toArray());
+                comando.setArray(5, arrayTelefone);
+                
                 comando.setString(6, usuario.getLogin());
                 comando.setString(7, usuario.getSenha());
 
@@ -38,7 +42,7 @@ public class UsuarioDAO {
 
     //Método para LER
     public void consultarUsuarios() throws SQLException {
-        String sql = "SELECT * FROM universidade.usuario";
+        String sql = "SELECT * FROM universidade.usuario;";
 
         //Cria a conexao e prepara o comando pro meio do prepared statment
         try(Connection conexao = ConnectionFactory.getConnection(); 
@@ -74,8 +78,8 @@ public class UsuarioDAO {
     //Método para ATUALIZAR
     public void atualizarUsuario(Usuario usuario, Long novoCPF){
         //Esse "SQL 1" é um tipo de retorno, ele busca o cpf específico, se encontrar retorna 1, sendo extremamente rápido
-        String sqlVerifica = "SELECT 1 FROM universidade.usuario WHERE cpf = ?";
-        String sqlUpdate = "UPDATE universidade.usuario SET cpf = ? WHERE cpf = ?";
+        String sqlVerifica = "SELECT 1 FROM universidade.usuario WHERE cpf = ?;";
+        String sqlUpdate = "UPDATE universidade.usuario SET cpf = ? WHERE cpf = ?;";
 
         try (Connection conexao = ConnectionFactory.getConnection()) {
             
@@ -117,7 +121,28 @@ public class UsuarioDAO {
     }
 
     //Método para DELETAR
-    public void deletarUsuario(){
+    public void deletarUsuario(Long cpf){
+        //Mesmo tipo de consulta relizada acima, pois a lógica é praticamente a mesma
+        String sqlDelete = "DELETE FROM universidade.usuario WHERE cpf = ?;";
 
+        try(Connection conexao = ConnectionFactory.getConnection(); 
+            PreparedStatement comando = conexao.prepareStatement(sqlDelete)){
+                //Substitui a interrogação pelo CFP em sí
+                comando.setLong(1, cpf);
+
+                //Executa update retorna a quantidade de linhas apagadas no banco
+                int linhasAfetadas = comando.executeUpdate();
+
+                if(linhasAfetadas > 0){
+                    System.out.println("CPF encontrado, usuario deletado!");
+                } else{
+                    System.out.println("O CPF inserido nao esta no sistema");
+                }
+
+        }catch(SQLException e){
+            System.out.println("Nao foi possivel fazer a operação de deletar.");
+            e.printStackTrace();
+        }
     }
 }
+

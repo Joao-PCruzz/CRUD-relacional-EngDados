@@ -1,7 +1,6 @@
 import java.sql.*;
 import java.time.LocalDate;
-
-//import java.time.LocalDate;
+import java.util.List;
 import conexao.ConnectionFactory;
 import dao.UsuarioDAO;
 import model.Usuario;
@@ -19,11 +18,13 @@ public class Principal {
                 System.out.println("Iniciando opreação de vizualização...");
                 UsuarioDAO dao = new UsuarioDAO();
                 dao.consultarUsuarios();
-                System.out.println("Realizando a operação de Update...");
                 //É necessário fazer uma ligação dos Usuarios do model com o banco de dados se possível, entrtanto a operação está correta
-                Usuario testeUsuario = new Usuario(11111111100L, "Prof XX", LocalDate.of(1980, 03, 05), "profA@email.com", "99998888,88889999", "profa", "senha1");
-                dao.atualizarUsuario(testeUsuario, 123123123L);
-                System.out.println("Vizualizando novamente.");
+                Usuario testeUsuario = new Usuario(111111100L, "Prof XX", LocalDate.of(1980, 03, 05), List.of("profA@email.com"), List.of("99998888,88889999"), "profaaa", "senha1");
+                dao.inserirUsuario(testeUsuario);
+                dao.consultarUsuarios();
+                dao.atualizarUsuario(testeUsuario, 8888888L);
+                dao.consultarUsuarios();
+                dao.deletarUsuario(8888888L);
                 dao.consultarUsuarios();
             }
 

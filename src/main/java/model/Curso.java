@@ -1,7 +1,7 @@
 package model;
 
 public class Curso{
-    private int idCurso;
+    private Integer idCurso;
     private String nome;
     private String grau; //Grau está em um domínio "tipo_grau" precisa-se ver como implementar isso no java
     private String turno; //mesma coisa, está no "tipo_turno"
@@ -11,7 +11,7 @@ public class Curso{
     //Constrututores
     public Curso() {
     }
-    public Curso(int idCurso, String nome, String grau, String turno, String campus, String nível) {
+    public Curso(Integer idCurso, String nome, String grau, String turno, String campus, String nível) {
         this.idCurso = idCurso;
         this.nome = nome;
         this.grau = grau;
@@ -21,10 +21,10 @@ public class Curso{
     }
 
     //Metodos Getters and Setters
-    public int getIdCurso() {
+    public Integer getIdCurso() {
         return idCurso;
     }
-    public void setIdCurso(int idCurso) {
+    public void setIdCurso(Integer idCurso) {
         this.idCurso = idCurso;
     }
     public String getNome() {

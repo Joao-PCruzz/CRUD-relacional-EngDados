@@ -1,15 +1,17 @@
 package model;
 
+import java.math.BigDecimal;
+
 public class Estudante {
     private String mat_estudante; //Faz parte do "universidade.matricula"
     private long cpf; //Faz parte do "tipo_cpf"
-    private double mc;
-    private int ano_ingresso;
+    private BigDecimal mc; //Para mapear o tipo DECIMAL(2)
+    private Integer ano_ingresso;
 
     //Construtores
     public Estudante() {
     }
-    public Estudante(String mat_estudante, long cpf, double mc, int ano_ingresso) {
+    public Estudante(String mat_estudante, long cpf, BigDecimal mc, Integer ano_ingresso) {
         this.mat_estudante = mat_estudante;
         this.cpf = cpf;
         this.mc = mc;
@@ -29,16 +31,16 @@ public class Estudante {
     public void setCpf(long cpf) {
         this.cpf = cpf;
     }
-    public double getMc() {
+    public BigDecimal getMc() {
         return mc;
     }
-    public void setMc(double mc) {
+    public void setMc(BigDecimal mc) {
         this.mc = mc;
     }
-    public int getAno_ingresso() {
+    public Integer getAno_ingresso() {
         return ano_ingresso;
     }
-    public void setAno_ingresso(int ano_ingresso) {
+    public void setAno_ingresso(Integer ano_ingresso) {
         this.ano_ingresso = ano_ingresso;
     }
 

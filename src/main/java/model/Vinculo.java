@@ -2,9 +2,9 @@ package model;
 import java.time.LocalDate;
 
 public class Vinculo {
-    private int idVinculo;
+    private Integer idVinculo;
     private String mat_estudante; //faz parte de "universidaed.matricula"
-    private int curso;
+    private Integer curso;
     private LocalDate data_entrada;
     private String status; //Faz parte do domínio "status_estudante"
     private LocalDate data_saida;
@@ -12,8 +12,7 @@ public class Vinculo {
     //construtores
     public Vinculo() {
     }
-    public Vinculo(int idVinculo, String mat_estudante, int curso, LocalDate data_entrada, String status,
-            LocalDate data_saida) {
+    public Vinculo(Integer idVinculo, String mat_estudante, Integer curso, LocalDate data_entrada, String status, LocalDate data_saida) {
         this.idVinculo = idVinculo;
         this.mat_estudante = mat_estudante;
         this.curso = curso;
@@ -23,10 +22,10 @@ public class Vinculo {
     }
 
     //Metodo Getters and Setters
-    public int getIdVinculo() {
+    public Integer getIdVinculo() {
         return idVinculo;
     }
-    public void setIdVinculo(int idVinculo) {
+    public void setIdVinculo(Integer idVinculo) {
         this.idVinculo = idVinculo;
     }
     public String getMat_estudante() {
