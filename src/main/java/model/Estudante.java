@@ -1,19 +1,30 @@
 package model;
 
 import java.math.BigDecimal;
+import jakarta.persistence.*; //Importante para a integração do ORM
 
+@Entity
+@Table(name = "Estudante")
 public class Estudante {
+    @Id
+    @Column(name = "mat_estudante", length = 12)
     private String mat_estudante; //Faz parte do "universidade.matricula"
-    private long cpf; //Faz parte do "tipo_cpf"
+    @Column(name = "mc")
     private BigDecimal mc; //Para mapear o tipo DECIMAL(2)
+    @Column(name = "ano_ingresso")
     private Integer ano_ingresso;
+
+    // Relacionamento 1:1 com Usuario
+    @OneToOne
+    @JoinColumn(name = "Usuario_cpf", referencedColumnName = "cpf")
+    private Usuario usuario; 
 
     //Construtores
     public Estudante() {
     }
-    public Estudante(String mat_estudante, long cpf, BigDecimal mc, Integer ano_ingresso) {
+    public Estudante(String mat_estudante, BigDecimal mc, Integer ano_ingresso, Usuario usuario) {
         this.mat_estudante = mat_estudante;
-        this.cpf = cpf;
+        this.usuario = usuario;
         this.mc = mc;
         this.ano_ingresso = ano_ingresso;
     }
@@ -25,11 +36,11 @@ public class Estudante {
     public void setMat_estudante(String mat_estudante) {
         this.mat_estudante = mat_estudante;
     }
-    public long getCpf() {
-        return cpf;
+    public Usuario getUsuario() {
+        return usuario;
     }
-    public void setCpf(long cpf) {
-        this.cpf = cpf;
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
     public BigDecimal getMc() {
         return mc;
@@ -48,7 +59,7 @@ public class Estudante {
     public String toString() {
         return "Estudante{" +
                 "mat_estudante='" + mat_estudante + '\'' +
-                ", cpf=" + cpf +
+                ", cpf=" + (usuario != null ? usuario.getCpf() : "null") +
                 ", mc=" + mc +
                 ", ano_ingresso=" + ano_ingresso +
                 '}';

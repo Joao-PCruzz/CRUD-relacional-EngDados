@@ -3,13 +3,32 @@ package model;//O pacote model é responsável pro facilitar o projeto como um t
 import java.time.LocalDate;
 import java.util.List;
 
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+
+import jakarta.persistence.*; //É responsável por implementar a especificação padrão para a ORM
+
+@Entity //Diz ao JPA que esta classe é uma entidade que representa uma tabela no banco
+@Table(name = "Usuario") // Define o nome exato da tabela no PostgreSQL
 public class Usuario {
+
+    @Id // Define que este atributo é a Chave Primária (Primary Key) da tabela
+    @Column(name = "cpf")
     private long cpf; //NUMERIC(13) em Java vira long
+    @Column(name="nome", length=45)
     private String nome;
+    @Column(name="data_nascimento")
     private LocalDate data_nascimento; //Date vira Local Date
+
+    @JdbcTypeCode(SqlTypes.JSON) // Diz ao Hibernate para ler/gravar como JSON no Postgres
+    @Column(name = "email", columnDefinition = "jsonb") // jsonb é a versão otimizada de JSON no Postgres
     private List<String> email;
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(name = "telefone", columnDefinition = "jsonb")
     private List<String> telefone;
+    @Column(name = "login", unique = true, length = 45)
     private String login;
+    @Column(name = "senha", length = 32)
     private String senha;
 
     //Construtores
