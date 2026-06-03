@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- As linhas abaixo configuram as regras globais e as versões do Jakarta Persistence (JPA). -->
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
+             version="3.0">
+
+    <!-- Define uma unidade de persistência. O nome "universidade-pu" é o apelido que será usado dentro do código para abrir a conexão. -->
+    <persistence-unit name="universidade-pu" transaction-type="RESOURCE_LOCAL">
+        <!-- Avisa ao Java que o framework do Hibernate é quem vai rodar as operações por trás do JPA. -->
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+
+         <!-- Mapeamento das Classes. -->
+        <class>model.Usuario</class>
+        <class>model.Estudante</class>
+        <class>model.Curso</class>
+        <class>model.Vinculo</class>
+
+        <properties>
+            <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver" />
+
+            <!-- Obriga o Hibernate a traduzir os comandos Java gerando um código SQL na sintaxe exata reconhecida pelo PostgreSQL. -->
+            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect" />
+            <!-- Debug visual. -->                                  <!-- Formatação do console. -->
+            <property name="hibernate.show_sql" value="true" /> <property name="hibernate.format_sql" value="true" />
+            <!-- Atualização Automática, a opção 'update' faz o Hibernate monitorar suas classes Java. -->
+            <property name="hibernate.hbm2ddl.auto" value="update" />
+        </properties>
+    </persistence-unit>
+</persistence>
