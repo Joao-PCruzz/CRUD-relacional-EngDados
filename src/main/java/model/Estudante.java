@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import jakarta.persistence.*; //Importante para a integração do ORM
 
 @Entity
-@Table(name = "Estudante")
+@Table(name = "Estudante", schema = "universidade")
 public class Estudante {
     @Id
     @Column(name = "mat_estudante", length = 12)

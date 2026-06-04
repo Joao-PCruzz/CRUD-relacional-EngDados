@@ -1,4 +1,3 @@
-import java.sql.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.HashMap;
@@ -11,6 +10,7 @@ public class Principal {
     // Deixamos a fábrica acessível para os DAOs se precisarem
     // A própria fábrica fica isolada e segura aqui dentro
     public static jakarta.persistence.EntityManagerFactory emf;
+    
     public static void main(String[] args) {
         System.out.println("Iniciando o teste de conexão com o Banco de Dados PostgreSQL na AWS via ORM...");
 
@@ -25,7 +25,7 @@ public class Principal {
             emf = Persistence.createEntityManagerFactory("universidade-pu", propriedadesModificadas);
             System.out.println("Conexão e validação com a AWS realizadas com sucesso!");
             // Instancia o DAO (garanta que o bloco static antigo foi removido de lá)
-            UsuarioDAO dao = new UsuarioDAO();
+            UsuarioDAO dao = new UsuarioDAO(emf);
 
 
             System.out.println("--- Operação: Consultar Usuários ---");
@@ -34,17 +34,15 @@ public class Principal {
               em objetos 'Usuario' prontos para o Java.
             */
             List<Usuario> listaInicial = dao.consultarUsuarios();
-            listaInicial.forEach(System.out::println);
+            imprimirTabelaUsuarios(listaInicial);
             System.out.println();
 
             System.out.println("--- Operação: Inserir Novo Usuário ---");
-            // Criando listas normais do Java; o Hibernate fará a conversão para o JSONB no Postgres automaticamente
-            List<String> emails = List.of("profA@email.com", "profA.trabalho@email.com");
-            List<String> telefones = List.of("79999998888", "7932221111");
-            Usuario testeUsuario = new Usuario(111111100L, "Prof XX", LocalDate.of(1980, 3, 5), emails, telefones, "profaaar", "senha1");
-            /*
-             O Hibernate converte de forma transparente as listas de e-mails/telefones do Java em arrays formatados como JSONB exigidos pela coluna do PostgreSQL na AWS.
-            */
+            // Criando listas normais do Java, o Hibernate fará a conversão para o JSONB no Postgres automaticamente
+            List<String> emailsNovos = List.of("lucas.silva@souufs.br", "lucas.pessoal@gmail.com");
+            List<String> telefonesNovos = List.of("79988887777", "7932112233");
+            Usuario testeUsuario = new Usuario(99988877711L, "Professor Teste", LocalDate.of(1985, 5, 20), emailsNovos, telefonesNovos, "proftst", "senha123");
+            //O Hibernate converte de forma transparente as listas de e-mails/telefones do Java em arrays formatados como JSONB exigidos pela coluna do PostgreSQL na AWS.
             dao.inserirUsuario(testeUsuario);
             System.out.println();
 
@@ -55,9 +53,8 @@ public class Principal {
             System.out.println("--- Operação: Atualizar Usuário ---");
             // Alteramos o dado apenas na memória do Java primeiro
             testeUsuario.setNome("Prof. XX Modificado");
-            // Alterando um dado da lista JSONB para testar a flexibilidade
-            testeUsuario.setEmail(List.of("prof_novo_email@email.com")); 
-            //O Hibernate compara o objeto da memória com o que está na AWS e altera na nuvem, exclusivamente as colunas de texto modificadas no Java.
+            testeUsuario.setEmail(List.of("prof_novo_email@email.com"));
+            // O Hibernate compara o objeto da memória com o que está na AWS e altera na nuvem
             dao.atualizarUsuario(testeUsuario);
             System.out.println();
 
@@ -67,7 +64,7 @@ public class Principal {
 
             System.out.println("--- Operação: Deletar Usuário ---");
             //Uma vez localizado, o Hibernate dispara um comando 'DELETE FROM usuario WHERE cpf = ...' limpando o registro de forma segura.
-            dao.deletarUsuario(111111100L);
+            dao.deletarUsuario(99988877711L);
             System.out.println();
 
             System.out.println("--- Operação: Consultar Final ---");
@@ -84,6 +81,43 @@ public class Principal {
                 System.out.println("Fábrica de conexões do JPA encerrada.");
             }
         }
+    }
+
+    // Método criado para ser possível mostrar a tabela do postgres, talvez seja um método temporário
+    private static void imprimirTabelaUsuarios(List<Usuario> usuarios) {
+        // Linha divisória com a contagem exata de caracteres para cada coluna
+        String divisoria = "+--------------+----------------------+------------+--------------------------------+----------------------+------------+";
+        
+        System.out.println(divisoria);
+        // Cabeçalho idêntico ao tamanho limite das colunas
+        System.out.printf("| %-12s | %-20s | %-10s | %-30s | %-20s | %-10s |\n", 
+                "CPF", "NOME", "DATA NASC.", "EMAILS", "TELEFONES", "LOGIN");
+        System.out.println(divisoria);
+
+        if (usuarios == null || usuarios.isEmpty()) {
+            System.out.printf("| %-118s |\n", "NENHUM REGISTRO ENCONTRADO NO BANCO DE DADOS");
+            System.out.println(divisoria);
+            return;
+        }
+
+        for (Usuario u : usuarios) {
+            // Evita NullPointerException se algum dado estiver vazio no banco
+            String nome = (u.getNome() != null) ? u.getNome() : "";
+            String data = (u.getData_nascimento() != null) ? u.getData_nascimento().toString() : "";
+            String emailsStr = (u.getEmail() != null) ? String.join(", ", u.getEmail()) : "";
+            String fonesStr = (u.getTelefone() != null) ? String.join(", ", u.getTelefone()) : "";
+            String login = (u.getLogin() != null) ? u.getLogin() : "";
+
+            // Trunca o texto se ele ultrapassar o limite da coluna para não deformar a tabela
+            if (nome.length() > 20) nome = nome.substring(0, 17) + "...";
+            if (emailsStr.length() > 30) emailsStr = emailsStr.substring(0, 27) + "...";
+            if (fonesStr.length() > 20) fonesStr = fonesStr.substring(0, 17) + "...";
+            if (login.length() > 10) login = login.substring(0, 7) + "...";
+
+            System.out.printf("| %-12d | %-20s | %-10s | %-30s | %-20s | %-10s |\n",
+                    u.getCpf(), nome, data, emailsStr, fonesStr, login);
+        }
+        System.out.println(divisoria);
     }
 }
 

@@ -3,7 +3,7 @@ package model;
 import jakarta.persistence.*; //Importante para a integração do ORM
 
 @Entity
-@Table(name = "Curso")
+@Table(name = "Curso", schema = "universidade")
 public class Curso{
 
     @Id

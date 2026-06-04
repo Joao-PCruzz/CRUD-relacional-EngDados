@@ -1,28 +1,18 @@
 package dao; //Esse package é responsável por implementar todas as funções do CRUD separadamente
-import java.sql.*;
-import java.time.LocalDate;
 import model.Usuario;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.List;
 import jakarta.persistence.*;
 
+
 public class UsuarioDAO {
-   // A própria fábrica fica isolada aqui, lendo o launch.json perfeitamente
-    private static final EntityManagerFactory emf;
+    private final EntityManagerFactory emf;
 
-    static {
-        Map<String, String> propriedades = new HashMap<>();
-        propriedades.put("jakarta.persistence.jdbc.url", System.getenv("DB_URL"));
-        propriedades.put("jakarta.persistence.jdbc.user", System.getenv("DB_USER"));
-        propriedades.put("jakarta.persistence.jdbc.password", System.getenv("DB_PASSWORD"));
-
-        emf = Persistence.createEntityManagerFactory("universidade-pu", propriedades);
+    // O construtor obriga quem criar o DAO a passar a fábrica de conexões
+    public UsuarioDAO(EntityManagerFactory emf) {
+        this.emf = emf;
     }
-
-    // Seu método auxiliar consome a fábrica local com segurança
     private EntityManager getEntityManager() {
-        return emf.createEntityManager();
+        return this.emf.createEntityManager();
     }
 
     // --- CRIAR (CREATE) ---
@@ -59,8 +49,7 @@ public class UsuarioDAO {
             // Usamos JPQL (Orientado a Objetos) e não SQL nativo. "Usuario" refere-se à classe Java.
             /*
               O "SELECT u FROM Usuario u" aponta para a CLASSE Java "Usuario" (com U maiúsculo), e não para a tabela física. 
-              O Hibernate traduz isso para o SQL do Postgres sozinho.
-              O .getResultList() já converte todas as linhas retornadas em uma Lista de Objetos pronta.
+              O Hibernate traduz isso para o SQL do Postgres sozinho, o .getResultList() já converte todas as linhas retornadas em uma Lista de Objetos pronta.
             */
             return em.createQuery("SELECT u FROM Usuario u", Usuario.class).getResultList();
         } finally {

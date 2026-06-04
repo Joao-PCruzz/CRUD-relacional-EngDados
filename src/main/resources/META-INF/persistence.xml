@@ -23,8 +23,8 @@
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect" />
             <!-- Debug visual. -->                                  <!-- Formatação do console. -->
             <property name="hibernate.show_sql" value="true" /> <property name="hibernate.format_sql" value="true" />
-            <!-- Atualização Automática, a opção 'update' faz o Hibernate monitorar suas classes Java. -->
-            <property name="hibernate.hbm2ddl.auto" value="update" />
+            <!-- Atualização Automática, o validate diz para apenas validar a estrutura existente -->
+            <property name="hibernate.hbm2ddl.auto" value="none" />
         </properties>
     </persistence-unit>
 </persistence>

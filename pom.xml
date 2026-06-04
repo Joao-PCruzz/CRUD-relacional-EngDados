@@ -27,11 +27,11 @@
         </dependency>
 
     <!-- Foi criada esse dependência para o Hibernate pois ela traz o Jakarta de forma nativa por baixo dos panos, importante para o ORM -->
-    <dependency>
-            <groupId>org.hibernate.orm</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>6.5.2.Final</version>
-        </dependency>
+        <dependency>
+                <groupId>org.hibernate.orm</groupId>
+                <artifactId>hibernate-core</artifactId>
+                <version>6.5.2.Final</version>
+            </dependency>
     </dependencies>
     
 </project>

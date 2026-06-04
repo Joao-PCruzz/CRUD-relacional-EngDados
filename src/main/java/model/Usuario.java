@@ -3,28 +3,24 @@ package model;//O pacote model é responsável pro facilitar o projeto como um t
 import java.time.LocalDate;
 import java.util.List;
 
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
-
 import jakarta.persistence.*; //É responsável por implementar a especificação padrão para a ORM
 
 @Entity //Diz ao JPA que esta classe é uma entidade que representa uma tabela no banco
-@Table(name = "Usuario") // Define o nome exato da tabela no PostgreSQL
+@Table(name = "Usuario", schema = "universidade") // Define o nome exato da tabela no PostgreSQL
 public class Usuario {
 
     @Id // Define que este atributo é a Chave Primária (Primary Key) da tabela
-    @Column(name = "cpf")
+    @Column(name = "cpf", columnDefinition = "universidade.tipo_cpf")
     private long cpf; //NUMERIC(13) em Java vira long
     @Column(name="nome", length=45)
     private String nome;
     @Column(name="data_nascimento")
     private LocalDate data_nascimento; //Date vira Local Date
 
-    @JdbcTypeCode(SqlTypes.JSON) // Diz ao Hibernate para ler/gravar como JSON no Postgres
-    @Column(name = "email", columnDefinition = "jsonb") // jsonb é a versão otimizada de JSON no Postgres
+    // O Hibernate 6 mapeia List<String> diretamente para VARCHAR[] no Postgres.
+    @Column(name = "email")
     private List<String> email;
-    @JdbcTypeCode(SqlTypes.JSON)
-    @Column(name = "telefone", columnDefinition = "jsonb")
+    @Column(name = "telefone")
     private List<String> telefone;
     @Column(name = "login", unique = true, length = 45)
     private String login;
@@ -89,8 +85,19 @@ public class Usuario {
         this.senha = senha;
     }
 
-    @Override
-    public String toString(){
-        return "Usuario [CPF=" + cpf + ", Nome=" + nome + ", Login=" + login + "]";
+   @Override
+    public String toString() {
+        // Junta os elementos da lista em uma única String separada por vírgula para exibição
+        String emailsStr = (email != null) ? String.join(", ", email) : "";
+        String fonesStr = (telefone != null) ? String.join(", ", telefone) : "";
+
+        // Corta os textos se forem grandes demais para não quebrar o alinhamento da tela
+        if (emailsStr.length() > 30) emailsStr = emailsStr.substring(0, 27) + "...";
+        if (fonesStr.length() > 20) fonesStr = fonesStr.substring(0, 17) + "...";
+        String nomeCurto = (nome != null && nome.length() > 20) ? nome.substring(0, 17) + "..." : nome;
+
+        // Retorna uma linha alinhada com espaçamentos fixos (%-20s = 20 caracteres alinhados à esquerda)
+        return String.format("| %-12d | %-20s | %-12s | %-30s | %-20s | %-10s |", 
+                cpf, nomeCurto, data_nascimento, emailsStr, fonesStr, login);
     }
 }
