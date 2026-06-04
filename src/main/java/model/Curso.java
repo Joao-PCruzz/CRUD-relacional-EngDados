@@ -1,23 +1,35 @@
 package model;
 
+import jakarta.persistence.*; //Importante para a integração do ORM
+
+@Entity
+@Table(name = "Curso", schema = "universidade")
 public class Curso{
+
+    @Id
+    @Column(name = "idCurso")
     private Integer idCurso;
+    @Column(name = "nome", unique = true)
     private String nome;
+    @Column(name = "grau")
     private String grau; //Grau está em um domínio "tipo_grau" precisa-se ver como implementar isso no java
+    @Column(name = "turno", unique = true)
     private String turno; //mesma coisa, está no "tipo_turno"
+    @Column(name = "campus", unique = true)
     private String campus;
-    private String nível; //está no "tipo_nivel"
+    @Column(name = "nivel", unique = true)
+    private String nivel; //está no "tipo_nivel"
 
     //Constrututores
     public Curso() {
     }
-    public Curso(Integer idCurso, String nome, String grau, String turno, String campus, String nível) {
+    public Curso(Integer idCurso, String nome, String grau, String turno, String campus, String nivel) {
         this.idCurso = idCurso;
         this.nome = nome;
         this.grau = grau;
         this.turno = turno;
         this.campus = campus;
-        this.nível = nível;
+        this.nivel = nivel;
     }
 
     //Metodos Getters and Setters
@@ -51,11 +63,11 @@ public class Curso{
     public void setCampus(String campus) {
         this.campus = campus;
     }
-    public String getNível() {
-        return nível;
+    public String getNivel() {
+        return nivel;
     }
-    public void setNível(String nível) {
-        this.nível = nível;
+    public void setNivel(String nível) {
+        this.nivel = nível;
     }
 
     @Override
@@ -66,7 +78,7 @@ public class Curso{
                 ", grau='" + grau + '\'' +
                 ", turno='" + turno + '\'' +
                 ", campus='" + campus + '\'' +
-                ", nível='" + nível + '\'' +
+                ", nivel='" + nivel + '\'' +
                 '}';
     }
 }

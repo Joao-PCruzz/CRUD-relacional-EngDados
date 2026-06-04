@@ -1,20 +1,36 @@
 package model;
 import java.time.LocalDate;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "Vinculo", schema = "universidade")
 public class Vinculo {
+    @Id
+    @Column(name = "idVinculo")
     private Integer idVinculo;
-    private String mat_estudante; //faz parte de "universidaed.matricula"
-    private Integer curso;
+    @Column(name = "data_entarda")
     private LocalDate data_entrada;
+    @Column(name = "status")
     private String status; //Faz parte do domínio "status_estudante"
+    @Column(name = "data_saida")
     private LocalDate data_saida;
+
+    // Muitos vínculos pertencem a um estudante
+    @ManyToOne
+    @JoinColumn(name = "Estudante_mat_estudante", referencedColumnName = "mat_estudante")
+    private Estudante estudante;
+
+    // Muitos vínculos pertencem a um curso
+    @ManyToOne
+    @JoinColumn(name = "Curso_idCurso", referencedColumnName = "idCurso")
+    private Curso curso;
 
     //construtores
     public Vinculo() {
     }
-    public Vinculo(Integer idVinculo, String mat_estudante, Integer curso, LocalDate data_entrada, String status, LocalDate data_saida) {
+    public Vinculo(Integer idVinculo, Estudante estudante, Curso curso, LocalDate data_entrada, String status, LocalDate data_saida) {
         this.idVinculo = idVinculo;
-        this.mat_estudante = mat_estudante;
+        this.estudante = estudante;
         this.curso = curso;
         this.data_entrada = data_entrada;
         this.status = status;
@@ -28,16 +44,16 @@ public class Vinculo {
     public void setIdVinculo(Integer idVinculo) {
         this.idVinculo = idVinculo;
     }
-    public String getMat_estudante() {
-        return mat_estudante;
+    public Estudante getEstudante() {
+        return estudante;
     }
-    public void setMat_estudante(String mat_estudante) {
-        this.mat_estudante = mat_estudante;
+    public void setEstudante(Estudante estudante) {
+        this.estudante = estudante;
     }
-    public int getCurso() {
+    public Curso getCurso() {
         return curso;
     }
-    public void setCurso(int curso) {
+    public void setCurso(Curso curso) {
         this.curso = curso;
     }
     public LocalDate getData_entrada() {
@@ -59,15 +75,15 @@ public class Vinculo {
         this.data_saida = data_saida;
     }
 
-    @Override
+   @Override
     public String toString() {
         return "Vinculo{" +
                 "idVinculo=" + idVinculo +
-                ", mat_estudante='" + mat_estudante + '\'' +
-                ", curso=" + curso +
+                ", mat_estudante='" + (estudante != null ? estudante.getMat_estudante() : "null") + '\'' +
+                ", id_curso=" + (curso != null ? curso.getIdCurso() : "null") +
                 ", data_entrada=" + data_entrada +
                 ", status='" + status + '\'' +
                 ", data_saida=" + data_saida +
                 '}';
-    }
+}
 }

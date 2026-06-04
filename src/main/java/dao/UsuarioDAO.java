@@ -1,147 +1,122 @@
 package dao; //Esse package é responsável por implementar todas as funções do CRUD separadamente
-//Separando pelas tabelas que devem ser utilizadas
-import java.sql.*;
-import java.time.LocalDate;
 import model.Usuario;
-import conexao.ConnectionFactory;
+import java.util.List;
+import jakarta.persistence.*;
+
 
 public class UsuarioDAO {
+    //Fábrica de conexões pelo Hibernate
+    private final EntityManagerFactory emf;
 
-    //Método para CRIAR
-    public void inserirUsuario(Usuario usuario) throws SQLException {
-        String sql = "INSERT INTO universidade.usuario( cpf, nome, data_nascimento, email, telefone, login, senha) VALUES (?, ?, ?, ?, ?, ?, ?);";
-
-        try(Connection conexao = ConnectionFactory.getConnection();
-            PreparedStatement comando = conexao.prepareStatement(sql)){
-                System.out.println("Realizando inserção...");
-
-                //Comando para substituir os valores "?" pelos valores reais
-                comando.setLong(1, usuario.getCpf());
-                comando.setString(2, usuario.getNome());
-                comando.setDate(3, java.sql.Date.valueOf(usuario.getData_nascimento())); // Converte LocalDate para o tipo Date do SQL
-                //Primeiro é necessário converter o email e telefone em array para ser possível passar para a mascara '?'
-                //O método createArrayOf converte a lista para um array nativo em SQL
-                Array arrayEmail = conexao.createArrayOf("VARCHAR", usuario.getEmail().toArray());
-                comando.setArray(4, arrayEmail);
-                Array arrayTelefone = conexao.createArrayOf("VARCHAR", usuario.getTelefone().toArray());
-                comando.setArray(5, arrayTelefone);
-                
-                comando.setString(6, usuario.getLogin());
-                comando.setString(7, usuario.getSenha());
-
-                //Execução da Query diretamente para a núvem da AWS
-                comando.executeUpdate();
-                System.out.println("Usuario inserido com sucesso!");
-
-        } catch(SQLException e) {
-            System.out.println("Nao foi possivel inserir o Usuario.");
-            e.printStackTrace();
-        }
-        //Ao chegar aqui, o java fecha a execução e o comando automaticamente.
+    // O construtor obriga quem criar o DAO a passar a fábrica de conexões
+    public UsuarioDAO(EntityManagerFactory emf) {
+        this.emf = emf;
+    }
+    private EntityManager getEntityManager() {
+        return this.emf.createEntityManager();
     }
 
-    //Método para LER
-    public void consultarUsuarios() throws SQLException {
-        String sql = "SELECT * FROM universidade.usuario;";
-
-        //Cria a conexao e prepara o comando pro meio do prepared statment
-        try(Connection conexao = ConnectionFactory.getConnection(); 
-        PreparedStatement comando = conexao.prepareStatement(sql); 
-        ResultSet resultado = comando.executeQuery()){
-
-        System.out.println("Executar consulta: " + sql);
-        System.out.printf("%-15s | %-20s | %-15s | %-15s | %-15s%n", "CPF", "NOME", "DATA NASC.", "LOGIN", "SENHA");
-
-        // Percorre cada linha retornada da tabela na AWS
-        while (resultado.next()) {
-            Long cpf = resultado.getLong("cpf"); 
-            String nome = resultado.getString("nome");
-            // Busca o DATE do SQL diretamente como LocalDate do Java
-            LocalDate dataNascimento = resultado.getObject("data_nascimento", LocalDate.class);
-            String login = resultado.getString("login");
-            String senha = resultado.getString("senha");
-            
-            // Exibe os dados formatados em colunas no terminal
-            System.out.printf("%-15d | %-20s | %-15s | %-15s | %-15s%n", 
-                    cpf, nome, dataNascimento, login, senha);
-        }
-        System.out.println("Comando executado com sucesso.");
-        System.out.println();
-
-        } catch (SQLException e) {
-            System.out.println("Não foi possível consultar a tabela");
+    // --- CRIAR (CREATE) ---
+    public void inserirUsuario(Usuario usuario) {
+        // Abre um "Gerenciador de Entidades" (como se fosse o canal de conversa com o banco)
+        EntityManager em = getEntityManager();
+        try {
+            // Em operações que alteram dados (Insert, Update, Delete), precisamos abrir uma Transação
+            em.getTransaction().begin();
+            /*
+              O método .persist() pega o objeto Java completo e o transforma em um comando SQL.
+              O Hibernate lê as anotações da classe Usuario, transforma a List de e-mails/telefones 
+              em um formato JSONB e monta o "INSERT INTO..." para enviar para a AWS automaticamente.
+             */
+            em.persist(usuario); 
+            // Confirma a operação. Só depois do commit os dados são salvos de verdade na AWS
+            em.getTransaction().commit();
+            System.out.println("Usuario inserido com sucesso via ORM!");
+        } catch (Exception e) {
+            // Se der qualquer erro (ex: CPF duplicado), o rollback cancela tudo para não quebrar o banco
+            em.getTransaction().rollback();
+            System.err.println("Erro ao inserir usuario.");
             e.printStackTrace();
+        } finally {
+            // Fecha o canal de conversa para liberar a memória e a conexão com a nuvem
+            em.close();
         }
-        //Ao chegar aqui, o java fecha a execução e o comando automaticamente
     }
-    
-    //Método para ATUALIZAR
-    public void atualizarUsuario(Usuario usuario, Long novoCPF){
-        //Esse "SQL 1" é um tipo de retorno, ele busca o cpf específico, se encontrar retorna 1, sendo extremamente rápido
-        String sqlVerifica = "SELECT 1 FROM universidade.usuario WHERE cpf = ?;";
-        String sqlUpdate = "UPDATE universidade.usuario SET cpf = ? WHERE cpf = ?;";
 
-        try (Connection conexao = ConnectionFactory.getConnection()) {
-            
-            // Verificando se o novo CPF já está cadastrado no banco
-            try (PreparedStatement comandoVerifica = conexao.prepareStatement(sqlVerifica)) {
-                comandoVerifica.setLong(1, novoCPF);
-                try (ResultSet result = comandoVerifica.executeQuery()) {
-                    //isso é feito pois o result começa em uma linha "Fantasma" onde não há registros, ou seja, na posição 0
-                    //Ao ir para a linah 1, ele entra na tabela de fato, e verifica se o cpf foi encontrado ou não
-                    if (result.next()) {
-                        // Se o result.next() retornou true, significa que o CPF já existe
-                        System.out.println("Erro: O CPF " + novoCPF + " já está cadastrado para outro usuário.");
-                        return; // Encerra o método aqui e impede o UPDATE
-                    }
-                }
+    // --- LER (READ) ---
+    public List<Usuario> consultarUsuarios() {
+        EntityManager em = getEntityManager();
+        try {
+            // Usamos JPQL (Orientado a Objetos) e não SQL nativo. "Usuario" refere-se à classe Java.
+            /*
+              O "SELECT u FROM Usuario u" aponta para a CLASSE Java "Usuario" (com U maiúsculo), e não para a tabela física. 
+              O Hibernate traduz isso para o SQL do Postgres sozinho, o .getResultList() já converte todas as linhas retornadas em uma Lista de Objetos pronta.
+            */
+            return em.createQuery("SELECT u FROM Usuario u", Usuario.class).getResultList();
+        } finally {
+            // Consultas simples não alteram dados, então não precisam de transaction.begin() ou commit().
+            em.close();
+        }
+    }
+
+    // --- ATUALIZAR (UPDATE) ---
+    //Esse método é impossibilitado de alterar somente o CPF
+    public void atualizarUsuario(Usuario usuarioAtualizado) {
+       EntityManager em = getEntityManager();
+    try {
+        em.getTransaction().begin();
+         //Tentamos encontrar o usuário original no banco da AWS usando o CPF fornecido.
+        Usuario usuarioBanco = em.find(Usuario.class, usuarioAtualizado.getCpf());
+        //Se o retorno for diferente de nulo, o usuário realmente existe na AWS.
+        if (usuarioBanco != null) {
+            // Copiamos os novos dados para o objeto que o Hibernate já está rastreando
+            usuarioBanco.setNome(usuarioAtualizado.getNome());
+            usuarioBanco.setData_nascimento(usuarioAtualizado.getData_nascimento());
+            usuarioBanco.setEmail(usuarioAtualizado.getEmail());
+            usuarioBanco.setTelefone(usuarioAtualizado.getTelefone());
+            usuarioBanco.setLogin(usuarioAtualizado.getLogin());
+            usuarioBanco.setSenha(usuarioAtualizado.getSenha());
+
+            //Ao fazermos o ".commit()" abaixo, o Hibernate detecta as mudanças e dispara um comando SQL UPDATE automaticamente para a AWS.
+            System.out.println("Usuário atualizado com sucesso!");
+        } else {
+            // Se o usuário não existir no banco, nós avisamos e não fazemos nada
+            System.out.println("Aviso: Usuário com o CPF " + usuarioAtualizado.getCpf() + " não foi encontrado. Atualização cancelada.");
+        }
+        
+        // Finaliza a transação (salvando as alterações se o objeto existia)
+        em.getTransaction().commit();
+        
+    } catch (Exception e) {
+        em.getTransaction().rollback();
+        System.err.println("Erro ao tentar atualizar o usuário.");
+        e.printStackTrace();
+    } finally {
+        em.close();
+    }
+    }
+
+    // --- DELETAR (DELETE) ---
+    public void deletarUsuario(Long cpf) {
+        EntityManager em = getEntityManager();
+        try {
+            em.getTransaction().begin();
+            //Primeiro usamos o em.find() para buscar o usuário na AWS pelo CPF e carregá-lo na memória.
+            Usuario usuario = em.find(Usuario.class, cpf);
+            // Se o usuário foi encontrado no banco de dados, prosseguimos
+            if (usuario != null) {
+                //O método .remove() avisa ao Hibernate para deletar o registro correspondente a esse objeto específico lá no banco da AWS
+                em.remove(usuario);
+                System.out.println("Usuário deletado com sucesso!");
+            } else {
+                System.out.println("Usuário não encontrado.");
             }
-
-            //Se passou pelo teste acima, o CPF está livre.
-            try (PreparedStatement comandoUpdate = conexao.prepareStatement(sqlUpdate)) {
-                //Substituição dos valores de UPDATE no comando sql
-                comandoUpdate.setLong(1, novoCPF);           
-                comandoUpdate.setLong(2, usuario.getCpf());  
-                
-                //Variável instanciada pois no SLQ comandos podem ser considerados válidos sem atualizar nada, essa variável permite ter controle sobre isso
-                int linhasAfetadas = comandoUpdate.executeUpdate();
-                
-                if (linhasAfetadas > 0) {
-                    System.out.println("CPF atualizado com sucesso!");
-                    usuario.setCpf(novoCPF); // Atualiza o objeto na memória também
-                } else {
-                    System.out.println("Aviso: Nenhum usuário encontrado com o CPF atual: " + usuario.getCpf());
-                }
-            }
-
-        } catch (SQLException e) {
-            System.err.println("Erro de banco de dados: " + e.getMessage());
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
             e.printStackTrace();
-        }
-    }
-
-    //Método para DELETAR
-    public void deletarUsuario(Long cpf){
-        //Mesmo tipo de consulta relizada acima, pois a lógica é praticamente a mesma
-        String sqlDelete = "DELETE FROM universidade.usuario WHERE cpf = ?;";
-
-        try(Connection conexao = ConnectionFactory.getConnection(); 
-            PreparedStatement comando = conexao.prepareStatement(sqlDelete)){
-                //Substitui a interrogação pelo CFP em sí
-                comando.setLong(1, cpf);
-
-                //Executa update retorna a quantidade de linhas apagadas no banco
-                int linhasAfetadas = comando.executeUpdate();
-
-                if(linhasAfetadas > 0){
-                    System.out.println("CPF encontrado, usuario deletado!");
-                } else{
-                    System.out.println("O CPF inserido nao esta no sistema");
-                }
-
-        }catch(SQLException e){
-            System.out.println("Nao foi possivel fazer a operação de deletar.");
-            e.printStackTrace();
+        } finally {
+            em.close();
         }
     }
 }

@@ -32,5 +32,5 @@ replay_pid*
 bin/
 target/
 
-# Arquivo responsável pela conexão na database
-config.properties
+#Ignorar a pasta inteira .vccode para segurança
+.vscode/
