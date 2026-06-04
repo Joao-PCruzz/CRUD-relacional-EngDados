@@ -15,16 +15,21 @@ public class Principal {
         System.out.println("Iniciando o teste de conexão com o Banco de Dados PostgreSQL na AWS via ORM...");
 
         try {
-            // 1. LER AS VARIÁVEIS DO LAUNCH.JSON DIRETAMENTE AQUI
+            // Lê as variáveis o lauch.json diretamente aqui, mantendo o código seguro.
+            // O HashMap funciona utilizando uma "chave e valor"
             Map<String, String> propriedadesModificadas = new HashMap<>();
+            // A chave é o nome de propriedade do JPA, já o valor é a variável de conexão no launch.json
+            // O "System.getenv" busca o valor configurado nas variáveis de ambiente no lauch.json
+            // O Hibernate lê o 'persistence.xml', mas antes de conectar, ele olha dentro deste HashMap, que possui os dados necesários
             propriedadesModificadas.put("jakarta.persistence.jdbc.url", System.getenv("DB_URL"));
             propriedadesModificadas.put("jakarta.persistence.jdbc.user", System.getenv("DB_USER"));
             propriedadesModificadas.put("jakarta.persistence.jdbc.password", System.getenv("DB_PASSWORD"));
 
-            // 2. INICIALIZAR A FÁBRICA PASSANDO AS CREDENCIAIS RECUPERADAS
+            // Inicializar a fábrica passando as credenciais recuperadas
+            // Esse método aceita um Map como segundo parâmetro para ajudar na segurança da Database
             emf = Persistence.createEntityManagerFactory("universidade-pu", propriedadesModificadas);
             System.out.println("Conexão e validação com a AWS realizadas com sucesso!");
-            // Instancia o DAO (garanta que o bloco static antigo foi removido de lá)
+            // Instancia o DAO 
             UsuarioDAO dao = new UsuarioDAO(emf);
 
 
@@ -83,7 +88,7 @@ public class Principal {
         }
     }
 
-    // Método criado para ser possível mostrar a tabela do postgres, talvez seja um método temporário
+    // Método criado para ser possível mostrar a tabela do postgres, talvez seja um método temporário (principalmente se o toString das classes poder ser usado)
     private static void imprimirTabelaUsuarios(List<Usuario> usuarios) {
         // Linha divisória com a contagem exata de caracteres para cada coluna
         String divisoria = "+--------------+----------------------+------------+--------------------------------+----------------------+------------+";

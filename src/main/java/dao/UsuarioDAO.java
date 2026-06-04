@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 
 
 public class UsuarioDAO {
+    //Fábrica de conexões pelo Hibernate
     private final EntityManagerFactory emf;
 
     // O construtor obriga quem criar o DAO a passar a fábrica de conexões
@@ -23,7 +24,7 @@ public class UsuarioDAO {
             // Em operações que alteram dados (Insert, Update, Delete), precisamos abrir uma Transação
             em.getTransaction().begin();
             /*
-              O método .persist() pega o seu objeto Java completo e o transforma em um comando SQL.
+              O método .persist() pega o objeto Java completo e o transforma em um comando SQL.
               O Hibernate lê as anotações da classe Usuario, transforma a List de e-mails/telefones 
               em um formato JSONB e monta o "INSERT INTO..." para enviar para a AWS automaticamente.
              */
