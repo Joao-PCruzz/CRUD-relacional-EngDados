@@ -23,7 +23,7 @@ public class VinculoDAO extends BaseDAO{
     }
 
     public List<Vinculo> consultarVinculos() {
-        return runQuery(em -> em.createQuery("SELECT v FROM Vinculo v", Vinculo.class)).getResultList();
+        return runQuery(em -> em.createQuery("SELECT v FROM Vinculo v", Vinculo.class).getResultList());
     }
 
     //UPDATE

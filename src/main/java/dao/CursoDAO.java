@@ -23,7 +23,7 @@ public class CursoDAO extends BaseDAO {
     }
 
     public List<Curso> consultarCursos() {
-        return runQuery(em -> em.createQuery("SELECT c FROM Curso c", Curso.class)).getResultList();
+        return runQuery(em -> em.createQuery("SELECT c FROM Curso c", Curso.class).getResultList());
     }
 
     //UPDATE

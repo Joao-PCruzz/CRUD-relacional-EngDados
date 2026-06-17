@@ -23,7 +23,7 @@ public class UsuarioDAO extends BaseDAO{
     }
 
     public List<Usuario> consultarUsuarios() {
-        return runQuery(em -> em.createQuery("SELECT u FROM Usuario u", Usuario.class)).getResultList();
+        return runQuery(em -> em.createQuery("SELECT u FROM Usuario u", Usuario.class).getResultList());
     }
 
     // --- ATUALIZAR (UPDATE) ---

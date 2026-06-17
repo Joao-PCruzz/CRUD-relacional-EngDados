@@ -24,7 +24,7 @@ public class EstudanteDAO extends CursoDAO {
     }
 
     public List<Estudante> consultarEstudantes() { //Método para ler todos os estudantes no banco
-        return runQuery(em -> em.createQuery("SELECT e FROM Estudante e", Estudante.class)).getResultList();
+        return runQuery(em -> em.createQuery("SELECT e FROM Estudante e", Estudante.class).getResultList());
     }
 
     //UPDATE
