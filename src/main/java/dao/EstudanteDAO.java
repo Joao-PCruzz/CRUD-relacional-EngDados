@@ -1,6 +1,5 @@
 package dao;
 import jakarta.persistence.*;
-import model.Curso;
 import model.Estudante;
 
 import java.util.List;
