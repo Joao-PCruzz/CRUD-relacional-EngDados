@@ -8,7 +8,7 @@ public class Vinculo {
     @Id
     @Column(name = "idVinculo")
     private Integer idVinculo;
-    @Column(name = "data_entarda")
+    @Column(name = "data_entrada")
     private LocalDate data_entrada;
     @Column(name = "status")
     private String status; //Faz parte do domínio "status_estudante"
