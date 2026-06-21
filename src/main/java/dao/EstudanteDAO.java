@@ -1,11 +1,10 @@
 package dao;
 import jakarta.persistence.*;
-import model.Curso;
 import model.Estudante;
 
 import java.util.List;
 
-public class EstudanteDAO extends CursoDAO {
+public class EstudanteDAO extends BaseDAO {
     //CONSTRUCTOR
     public EstudanteDAO(EntityManagerFactory emf) {
         super(emf);
