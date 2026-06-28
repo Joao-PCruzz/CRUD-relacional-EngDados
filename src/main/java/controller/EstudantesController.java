@@ -14,10 +14,6 @@ import java.util.List;
 
 public class EstudantesController {
     //ATTRIBUTES
-    //Título da página
-    @FXML private Label lblTitulo;
-    @FXML private Label lblSubtitulo;
-
     //Formulário de cadastro
     @FXML private TextField txtMatricula;
     @FXML private TextField txtMc;
@@ -141,7 +137,7 @@ public class EstudantesController {
         tvEstudantes.getItems().setAll(lista);
     }
 
-    //
+    //Carrega a box de usuários
     private void carregarComboBoxUsuarios() {
         List<Usuario> usuarios = usuarioDAO.consultarUsuarios();
         cbUsuario.getItems().setAll(usuarios);
