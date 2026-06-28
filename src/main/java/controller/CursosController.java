@@ -1,6 +1,7 @@
 package controller;
 
 import dao.CursoDAO;
+import javafx.scene.control.Button;
 import model.Curso;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
@@ -32,6 +33,12 @@ public class CursosController {
     @FXML private TableColumn<Curso, String> colTurno;
     @FXML private TableColumn<Curso, String> colCampus;
     @FXML private TableColumn<Curso, String> colNivel;
+
+    //Botões
+    @FXML private Button btnSalvar;
+    @FXML private Button btnAtualizar;
+    @FXML private Button btnPesquisar;
+    @FXML private Button btnDeletar;
 
     private CursoDAO cursoDAO;
 

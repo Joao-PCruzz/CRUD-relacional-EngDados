@@ -30,6 +30,12 @@ public class EstudantesController {
     //Barra de pesquisa
     @FXML private TextField txtPesquisa;
 
+    //Botões
+    @FXML private Button btnSalvar;
+    @FXML private Button btnAtualizar;
+    @FXML private Button btnPesquisar;
+    @FXML private Button btnDeletar;
+
     private EstudanteDAO estudanteDAO;
     private UsuarioDAO usuarioDAO;
 

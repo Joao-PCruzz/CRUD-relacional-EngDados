@@ -14,7 +14,7 @@ public class MainController {
     // Método genérico para trocar o conteúdo do centro
     private void trocarTela(String fxmlName) {
         try {
-            String caminhoCompleto = "/gui/" + fxmlName;
+            String caminhoCompleto = "/GUI/" + fxmlName;
             FXMLLoader loader = new FXMLLoader(getClass().getResource(caminhoCompleto));
             Parent novaTela = loader.load();
 

@@ -32,6 +32,12 @@ public class UsuariosController {
     @FXML private TableColumn<Usuario, String> colTelefone;
     @FXML private TableColumn<Usuario, String> colLogin;
 
+    //Botões
+    @FXML private Button btnSalvar;
+    @FXML private Button btnAtualizar;
+    @FXML private Button btnPesquisar;
+    @FXML private Button btnDeletar;
+
     //Barra de pesquisa
     @FXML private TextField txtPesquisa;
 

@@ -36,6 +36,12 @@ public class VinculosController {
     //Barra de pesquisa
     @FXML private TextField txtPesquisa;
 
+    //Botões
+    @FXML private Button btnSalvar;
+    @FXML private Button btnAtualizar;
+    @FXML private Button btnPesquisar;
+    @FXML private Button btnDeletar;
+
     private VinculoDAO vinculoDAO;
     private EstudanteDAO estudanteDAO;
     private CursoDAO cursoDAO;
