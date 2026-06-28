@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="650.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="650.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainController">
 
     <left>
         <VBox alignment="TOP_CENTER" prefWidth="200.0" spacing="15.0" style="-fx-background-color: #3b5998;" BorderPane.alignment="CENTER">
@@ -32,12 +32,6 @@
                         <Insets bottom="10.0" />
                     </VBox.margin>
                 </ImageView>
-
-                <Button fx:id="btnDashboard" alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-text-fill: white;" text="Dashboard">
-                    <font><Font name="System Bold" size="14.0" /></font>
-                    <graphic><Label style="-fx-text-fill: white;" text="📊" /></graphic>
-                    <padding><Insets bottom="10.0" left="15.0" top="10.0" /></padding>
-                </Button>
                 <Button fx:id="btnEstudantes" alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-text-fill: white;" text="Estudantes">
                     <font><Font name="System Bold" size="14.0" /></font>
                     <graphic><Label style="-fx-text-fill: white;" text="🎓" /></graphic>
