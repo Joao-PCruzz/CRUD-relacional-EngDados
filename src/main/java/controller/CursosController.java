@@ -11,6 +11,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CursosController {
     //ATTRIBUTES
@@ -44,7 +46,12 @@ public class CursosController {
 
     @FXML
     public void initialize() {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("universidade-pu");
+        Map<String, Object> overrides = new HashMap<>();
+        overrides.put("jakarta.persistence.jdbc.url", System.getenv("DB_URL"));
+        overrides.put("jakarta.persistence.jdbc.user", System.getenv("DB_USER"));
+        overrides.put("jakarta.persistence.jdbc.password", System.getenv("DB_PASSWORD"));
+
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("universidade-pu", overrides);
         this.cursoDAO = new CursoDAO(emf);
 
         colIdCurso.setCellValueFactory(new PropertyValueFactory<>("idCurso"));

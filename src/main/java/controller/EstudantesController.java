@@ -11,6 +11,8 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class EstudantesController {
     //ATTRIBUTES
@@ -43,7 +45,12 @@ public class EstudantesController {
     //Carregar dados iniciais
     @FXML
     public void initialize() {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("universidade-pu");
+        Map<String, Object> overrides = new HashMap<>();
+        overrides.put("jakarta.persistence.jdbc.url", System.getenv("DB_URL"));
+        overrides.put("jakarta.persistence.jdbc.user", System.getenv("DB_USER"));
+        overrides.put("jakarta.persistence.jdbc.password", System.getenv("DB_PASSWORD"));
+
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("universidade-pu", overrides);
 
         this.estudanteDAO = new EstudanteDAO(emf);
         this.usuarioDAO = new UsuarioDAO(emf);
