@@ -12,7 +12,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
 import java.time.LocalDate;
 import java.util.List;
 import conexao.JPAUtil;
