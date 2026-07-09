@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -63,14 +64,14 @@
                         <VBox spacing="5.0">
                             <children>
                                 <Label text="Grau" textFill="#555555" />
-                                <TextField fx:id="txtGrau" prefHeight="30.0" promptText="Ex: Bacharelado / Licenciatura" />
+                                <ComboBox fx:id="cbGrau" maxWidth="1.7976931348623157E308" prefHeight="30.0" prefWidth="290.0" promptText="Selecione o grau..." />
                             </children>
                         </VBox>
 
                         <VBox spacing="5.0">
                             <children>
                                 <Label text="Turno" textFill="#555555" />
-                                <TextField fx:id="txtTurno" prefHeight="30.0" promptText="Ex: Integral / Noturno" />
+                                <ComboBox fx:id="cbTurno" maxWidth="1.7976931348623157E308" prefHeight="30.0" prefWidth="290.0" promptText="Selecione o turno..." />
                             </children>
                         </VBox>
 
@@ -84,7 +85,7 @@
                         <VBox spacing="5.0">
                             <children>
                                 <Label text="Nível" textFill="#555555" />
-                                <TextField fx:id="txtNivel" prefHeight="30.0" promptText="Ex: Graduação / Pós-Graduação" />
+                                <ComboBox fx:id="cbNivel" maxWidth="1.7976931348623157E308" prefHeight="30.0" prefWidth="290.0" promptText="Selecione o nível..." />
                             </children>
                         </VBox>
 
@@ -128,7 +129,7 @@
                         <HBox alignment="CENTER_RIGHT" spacing="10.0">
                             <children>
                                 <Button fx:id="btnAtualizar" mnemonicParsing="false" onAction="#handleAtualizarCurso" prefHeight="30.0" prefWidth="100.0" style="-fx-background-color: #4b6cb7; -fx-text-fill: white;" text="Atualizar" />
-                                <Button fx:id="btnDeletar" mnemonicParsing="false" onAction="#handleAtualizarCurso" prefHeight="30.0" prefWidth="100.0" style="-fx-background-color: #d9534f; -fx-text-fill: white;" text="Deletar" />
+                                <Button fx:id="btnDeletar" mnemonicParsing="false" onAction="#handleDeletarCurso" prefHeight="30.0" prefWidth="100.0" style="-fx-background-color: #d9534f; -fx-text-fill: white;" text="Deletar" />
                             </children>
                         </HBox>
                     </children>

@@ -6,6 +6,8 @@ import dao.CursoDAO;
 import model.Vinculo;
 import model.Estudante;
 import model.Curso;
+import model.enums.StatusEstudante;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -21,7 +23,7 @@ public class VinculosController {
     //Formulário de cadastro
     @FXML private TextField txtIdVinculo; // ID do vínculo
     @FXML private DatePicker dpDataEntrada; // Data de ingresso
-    @FXML private TextField txtStatus; // Status (Domínio status_estudante)
+    @FXML private ComboBox<StatusEstudante> cbStatus; // Status (Domínio status_estudante)
     @FXML private DatePicker dpDataSaida; // Data de saída (opcional)
     @FXML private ComboBox<Estudante> cbEstudante; // FK para Estudante
     @FXML private ComboBox<Curso> cbCurso; // FK para Curso
@@ -30,7 +32,7 @@ public class VinculosController {
     @FXML private TableView<Vinculo> tvVinculos;
     @FXML private TableColumn<Vinculo, Integer> colIdVinculo;
     @FXML private TableColumn<Vinculo, LocalDate> colDataEntrada;
-    @FXML private TableColumn<Vinculo, String> colStatus;
+    @FXML private TableColumn<Vinculo, StatusEstudante> colStatus;
     @FXML private TableColumn<Vinculo, LocalDate> colDataSaida;
     @FXML private TableColumn<Vinculo, Estudante> colEstudante;
     @FXML private TableColumn<Vinculo, Curso> colCurso;
@@ -70,6 +72,9 @@ public class VinculosController {
         colEstudante.setCellValueFactory(new PropertyValueFactory<>("estudante"));
         colCurso.setCellValueFactory(new PropertyValueFactory<>("curso"));
 
+        //Preenche o ComboBox com os valores fixos do enum (equivalente ao ENUM do Postgres)
+        cbStatus.setItems(FXCollections.observableArrayList(StatusEstudante.values()));
+
         atualizarTabela();
         carregarComboBoxEstudantes();
         carregarComboBoxCursos();
@@ -88,7 +93,7 @@ public class VinculosController {
             Vinculo vinculo = new Vinculo();
             vinculo.setIdVinculo(Integer.parseInt(txtIdVinculo.getText()));
             vinculo.setData_entrada(dpDataEntrada.getValue());
-            vinculo.setStatus(txtStatus.getText());
+            vinculo.setStatus(cbStatus.getValue());
             vinculo.setData_saida(dpDataSaida.getValue());
             vinculo.setEstudante(cbEstudante.getValue());
             vinculo.setCurso(cbCurso.getValue());
@@ -110,7 +115,7 @@ public class VinculosController {
             Vinculo vinculo = new Vinculo();
             vinculo.setIdVinculo(Integer.parseInt(txtIdVinculo.getText()));
             vinculo.setData_entrada(dpDataEntrada.getValue());
-            vinculo.setStatus(txtStatus.getText());
+            vinculo.setStatus(cbStatus.getValue());
             vinculo.setData_saida(dpDataSaida.getValue());
             vinculo.setEstudante(cbEstudante.getValue());
             vinculo.setCurso(cbCurso.getValue());
@@ -186,7 +191,7 @@ public class VinculosController {
     private void preencherFormulario(Vinculo vinculo) {
         txtIdVinculo.setText(vinculo.getIdVinculo().toString());
         dpDataEntrada.setValue(vinculo.getData_entrada());
-        txtStatus.setText(vinculo.getStatus());
+        cbStatus.setValue(vinculo.getStatus());
         dpDataSaida.setValue(vinculo.getData_saida());
         cbEstudante.setValue(vinculo.getEstudante());
         cbCurso.setValue(vinculo.getCurso());
@@ -198,7 +203,7 @@ public class VinculosController {
     private void limparFormulario() {
         txtIdVinculo.clear();
         dpDataEntrada.setValue(null);
-        txtStatus.clear();
+        cbStatus.setValue(null);
         dpDataSaida.setValue(null);
         cbEstudante.setValue(null);
         cbCurso.setValue(null);

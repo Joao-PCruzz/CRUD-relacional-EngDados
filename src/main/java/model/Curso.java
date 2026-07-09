@@ -1,6 +1,12 @@
 package model;
 
 import jakarta.persistence.*; //Importante para a integração do ORM
+import model.converters.TipoGrauConverter;
+import model.converters.TipoNivelConverter;
+import model.converters.TipoTurnoConverter;
+import model.enums.TipoGrau;
+import model.enums.TipoNivel;
+import model.enums.TipoTurno;
 
 @Entity
 @Table(name = "Curso", schema = "universidade")
@@ -11,19 +17,22 @@ public class Curso{
     private Integer idCurso;
     @Column(name = "nome", unique = true)
     private String nome;
+    @Convert(converter = TipoGrauConverter.class)
     @Column(name = "grau")
-    private String grau; //Grau está em um domínio "tipo_grau" precisa-se ver como implementar isso no java
+    private TipoGrau grau; // Reflete o domínio "tipo_grau" do banco
+    @Convert(converter = TipoTurnoConverter.class)
     @Column(name = "turno", unique = true)
-    private String turno; //mesma coisa, está no "tipo_turno"
+    private TipoTurno turno; // Reflete o domínio "tipo_turno" do banco
     @Column(name = "campus", unique = true)
     private String campus;
+    @Convert(converter = TipoNivelConverter.class)
     @Column(name = "nivel", unique = true)
-    private String nivel; //está no "tipo_nivel"
+    private TipoNivel nivel; // Reflete o domínio "tipo_nivel" do banco
 
     //Constrututores
     public Curso() {
     }
-    public Curso(Integer idCurso, String nome, String grau, String turno, String campus, String nivel) {
+    public Curso(Integer idCurso, String nome, TipoGrau grau, TipoTurno turno, String campus, TipoNivel nivel) {
         this.idCurso = idCurso;
         this.nome = nome;
         this.grau = grau;
@@ -45,16 +54,16 @@ public class Curso{
     public void setNome(String nome) {
         this.nome = nome;
     }
-    public String getGrau() {
+    public TipoGrau getGrau() {
         return grau;
     }
-    public void setGrau(String grau) {
+    public void setGrau(TipoGrau grau) {
         this.grau = grau;
     }
-    public String getTurno() {
+    public TipoTurno getTurno() {
         return turno;
     }
-    public void setTurno(String turno) {
+    public void setTurno(TipoTurno turno) {
         this.turno = turno;
     }
     public String getCampus() {
@@ -63,10 +72,10 @@ public class Curso{
     public void setCampus(String campus) {
         this.campus = campus;
     }
-    public String getNivel() {
+    public TipoNivel getNivel() {
         return nivel;
     }
-    public void setNivel(String nível) {
+    public void setNivel(TipoNivel nível) {
         this.nivel = nível;
     }
 

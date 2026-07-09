@@ -79,7 +79,7 @@
                         <VBox spacing="4.0">
                             <children>
                                 <Label text="Status do Vínculo" textFill="#555555" />
-                                <TextField fx:id="txtStatus" prefHeight="30.0" promptText="Ex: Regular, Trancado, Formado" />
+                                <ComboBox fx:id="cbStatus" maxWidth="1.1797693134862315E308" prefHeight="30.0" promptText="Selecione o status..." />
                             </children>
                         </VBox>
 

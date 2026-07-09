@@ -2,8 +2,13 @@ package controller;
 
 import dao.CursoDAO;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import model.Curso;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import model.enums.TipoGrau;
+import model.enums.TipoTurno;
+import model.enums.TipoNivel;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -19,10 +24,10 @@ public class CursosController {
     //Formulário de cadastro
     @FXML private TextField txtIdCurso;
     @FXML private TextField txtNomeCurso;
-    @FXML private TextField txtGrau;
-    @FXML private TextField txtTurno;
+    @FXML private ComboBox<TipoGrau> cbGrau;
+    @FXML private ComboBox<TipoTurno> cbTurno;
     @FXML private TextField txtCampus;
-    @FXML private TextField txtNivel;
+    @FXML private ComboBox<TipoNivel> cbNivel;
 
     //Barra de pesquisa
     @FXML private TextField txtPesquisa;
@@ -31,10 +36,10 @@ public class CursosController {
     @FXML private TableView<Curso> tvCursos;
     @FXML private TableColumn<Curso, Integer> colIdCurso;
     @FXML private TableColumn<Curso, String> colNomeCurso;
-    @FXML private TableColumn<Curso, String> colGrau;
-    @FXML private TableColumn<Curso, String> colTurno;
+    @FXML private TableColumn<Curso, TipoGrau> colGrau;
+    @FXML private TableColumn<Curso, TipoTurno> colTurno;
     @FXML private TableColumn<Curso, String> colCampus;
-    @FXML private TableColumn<Curso, String> colNivel;
+    @FXML private TableColumn<Curso, TipoNivel> colNivel;
 
     //Botões
     @FXML private Button btnSalvar;
@@ -61,6 +66,11 @@ public class CursosController {
         colCampus.setCellValueFactory(new PropertyValueFactory<>("campus"));
         colNivel.setCellValueFactory(new PropertyValueFactory<>("nivel"));
 
+        //Preenche os ComboBox com os valores fixos dos enums (equivalentes aos ENUMs do Postgres)
+        cbGrau.setItems(FXCollections.observableArrayList(TipoGrau.values()));
+        cbTurno.setItems(FXCollections.observableArrayList(TipoTurno.values()));
+        cbNivel.setItems(FXCollections.observableArrayList(TipoNivel.values()));
+
         atualizarTabela();
 
         tvCursos.getSelectionModel().selectedItemProperty().addListener((obs, antigo, selecionado) -> {
@@ -77,10 +87,10 @@ public class CursosController {
             Curso curso = new Curso();
             curso.setIdCurso(Integer.parseInt(txtIdCurso.getText()));
             curso.setNome(txtNomeCurso.getText());
-            curso.setGrau(txtGrau.getText());
-            curso.setTurno(txtTurno.getText());
+            curso.setGrau(cbGrau.getValue());
+            curso.setTurno(cbTurno.getValue());
             curso.setCampus(txtCampus.getText());
-            curso.setNivel(txtNivel.getText());
+            curso.setNivel(cbNivel.getValue());
 
             cursoDAO.inserirCurso(curso);
 
@@ -100,10 +110,10 @@ public class CursosController {
             Curso curso = new Curso();
             curso.setIdCurso(Integer.parseInt(txtIdCurso.getText()));
             curso.setNome(txtNomeCurso.getText());
-            curso.setGrau(txtGrau.getText());
-            curso.setTurno(txtTurno.getText());
+            curso.setGrau(cbGrau.getValue());
+            curso.setTurno(cbTurno.getValue());
             curso.setCampus(txtCampus.getText());
-            curso.setNivel(txtNivel.getText());
+            curso.setNivel(cbNivel.getValue());
 
             cursoDAO.atualizarCurso(curso);
 
@@ -174,10 +184,10 @@ public class CursosController {
     private void preencherFormulario(Curso curso) {
         txtIdCurso.setText(String.valueOf(curso.getIdCurso()));
         txtNomeCurso.setText(curso.getNome());
-        txtGrau.setText(curso.getGrau());
-        txtTurno.setText(curso.getTurno());
+        cbGrau.setValue(curso.getGrau());
+        cbTurno.setValue(curso.getTurno());
         txtCampus.setText(curso.getCampus());
-        txtNivel.setText(curso.getNivel());
+        cbNivel.setValue(curso.getNivel());
 
         // Bloqueia alteração do ID primário em edições
         txtIdCurso.setDisable(true);
@@ -187,10 +197,10 @@ public class CursosController {
     private void limparFormulario() {
         txtIdCurso.clear();
         txtNomeCurso.clear();
-        txtGrau.clear();
-        txtTurno.clear();
+        cbGrau.setValue(null);
+        cbTurno.setValue(null);
         txtCampus.clear();
-        txtNivel.clear();
+        cbNivel.setValue(null);
 
         txtIdCurso.setDisable(false);
         tvCursos.getSelectionModel().clearSelection();

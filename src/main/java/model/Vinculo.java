@@ -1,6 +1,8 @@
 package model;
 import java.time.LocalDate;
 import jakarta.persistence.*;
+import model.converters.StatusEstudanteConverter;
+import model.enums.StatusEstudante;
 
 @Entity
 @Table(name = "Vinculo", schema = "universidade")
@@ -10,8 +12,9 @@ public class Vinculo {
     private Integer idVinculo;
     @Column(name = "data_entrada")
     private LocalDate data_entrada;
+    @Convert(converter = StatusEstudanteConverter.class)
     @Column(name = "status")
-    private String status; //Faz parte do domínio "status_estudante"
+    private StatusEstudante status; //Antes era String; agora reflete o domínio "status_estudante" do banco
     @Column(name = "data_saida")
     private LocalDate data_saida;
 
@@ -28,7 +31,7 @@ public class Vinculo {
     //construtores
     public Vinculo() {
     }
-    public Vinculo(Integer idVinculo, Estudante estudante, Curso curso, LocalDate data_entrada, String status, LocalDate data_saida) {
+    public Vinculo(Integer idVinculo, Estudante estudante, Curso curso, LocalDate data_entrada, StatusEstudante status, LocalDate data_saida) {
         this.idVinculo = idVinculo;
         this.estudante = estudante;
         this.curso = curso;
@@ -62,10 +65,10 @@ public class Vinculo {
     public void setData_entrada(LocalDate data_entrada) {
         this.data_entrada = data_entrada;
     }
-    public String getStatus() {
+    public StatusEstudante getStatus() {
         return status;
     }
-    public void setStatus(String status) {
+    public void setStatus(StatusEstudante status) {
         this.status = status;
     }
     public LocalDate getData_saida() {
