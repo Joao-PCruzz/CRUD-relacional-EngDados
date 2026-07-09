@@ -11,8 +11,7 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.HashMap;
-import java.util.Map;
+import conexao.JPAUtil;
 
 public class UsuariosController {
     //ATTRIBUTES
@@ -49,12 +48,7 @@ public class UsuariosController {
     //Carregar dados iniciais
     @FXML
     public void initialize() {
-        Map<String, Object> overrides = new HashMap<>();
-        overrides.put("jakarta.persistence.jdbc.url", System.getenv("DB_URL"));
-        overrides.put("jakarta.persistence.jdbc.user", System.getenv("DB_USER"));
-        overrides.put("jakarta.persistence.jdbc.password", System.getenv("DB_PASSWORD"));
-
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("universidade-pu", overrides);
+        EntityManagerFactory emf = JPAUtil.getEntityManagerFactory();
 
         this.usuarioDAO = new UsuarioDAO(emf);
 

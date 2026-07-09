@@ -15,8 +15,7 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.HashMap;
-import java.util.Map;
+import conexao.JPAUtil;
 
 public class VinculosController {
     //ATTRIBUTES
@@ -54,12 +53,7 @@ public class VinculosController {
     //Carregar dados iniciais
     @FXML
     public void initialize() {
-        Map<String, Object> overrides = new HashMap<>();
-        overrides.put("jakarta.persistence.jdbc.url", System.getenv("DB_URL"));
-        overrides.put("jakarta.persistence.jdbc.user", System.getenv("DB_USER"));
-        overrides.put("jakarta.persistence.jdbc.password", System.getenv("DB_PASSWORD"));
-
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("universidade-pu", overrides);
+        EntityManagerFactory emf = JPAUtil.getEntityManagerFactory();
 
         this.vinculoDAO = new VinculoDAO(emf);
         this.estudanteDAO = new EstudanteDAO(emf);

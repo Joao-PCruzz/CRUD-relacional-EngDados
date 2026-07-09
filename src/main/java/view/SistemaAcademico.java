@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import conexao.JPAUtil;
 
 public class SistemaAcademico extends Application {
 
@@ -27,6 +28,12 @@ public class SistemaAcademico extends Application {
             System.err.println("Erro: Não foi possível carregar o arquivo FXML da interface");
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void stop() {
+        //Chamado automaticamente pelo JavaFX quando a janela principal é fechada. Libera a conexão com o banco de dados de forma organizada.
+        JPAUtil.fechar();
     }
 
     public static void main(String[] args) {

@@ -20,12 +20,12 @@ public class Vinculo {
 
     // Muitos vínculos pertencem a um estudante
     @ManyToOne
-    @JoinColumn(name = "Estudante_mat_estudante", referencedColumnName = "mat_estudante")
+    @JoinColumn(name = "mat_estudante", referencedColumnName = "mat_estudante")
     private Estudante estudante;
 
     // Muitos vínculos pertencem a um curso
     @ManyToOne
-    @JoinColumn(name = "Curso_idCurso", referencedColumnName = "idCurso")
+    @JoinColumn(name = "curso", referencedColumnName = "idCurso")
     private Curso curso;
 
     //construtores

@@ -16,7 +16,7 @@ public class Estudante {
 
     // Relacionamento 1:1 com Usuario
     @OneToOne
-    @JoinColumn(name = "Usuario_cpf", referencedColumnName = "cpf")
+    @JoinColumn(name = "cpf", referencedColumnName = "cpf")
     private Usuario usuario; 
 
     //Construtores
