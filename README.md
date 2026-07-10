@@ -22,7 +22,7 @@ Baseado no Banco de Dados relacional disponibilizado pelo professor, criamos as 
 | Maven | - |
 | Banco de dados | PostgreSQL (AWS RDS) |
 
-## Arquitetura 🛠️
+## Arquitetura 🗂️
 
 O projeto segue uma separação em camadas:
 
@@ -87,7 +87,7 @@ Exemplo de configuração:
 
 > ⚠️ Nunca suba o `launch.json` com credenciais reais para um repositório público. Adicione-o ao `.gitignore` ou use um arquivo de exemplo (`launch.example.json`) sem os valores sensíveis.
 
-## Como executar
+## Como executar 💡
 
 1. Configure as variáveis de ambiente `DB_URL`, `DB_USER` e `DB_PASSWORD` (ou o `launch.json`, se estiver usando VS Code).
 2. Garanta que o banco PostgreSQL já tenha o schema `universidade` criado (tabelas, domínios e tipos `ENUM`).
@@ -98,7 +98,7 @@ Exemplo de configuração:
    ```
    ou execute a classe `main.Main` diretamente pela sua IDE.
 
-## Estrutura do banco de dados
+## Estrutura do banco de dados 🛠️
 
 O schema `universidade` contém, entre outras, as tabelas `Usuario`, `Estudante`, `Curso` e `Vinculo`, além dos seguintes domínios e tipos customizados relevantes:
 
