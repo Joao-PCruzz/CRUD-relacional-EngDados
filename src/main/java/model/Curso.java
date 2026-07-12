@@ -15,13 +15,13 @@ public class Curso{
     @Id
     @Column(name = "idCurso")
     private Integer idCurso;
-    @Column(name = "nome", unique = true)
+    @Column(name = "nome", unique = true, nullable = false)
     private String nome;
     @Convert(converter = TipoGrauConverter.class)
     @Column(name = "grau")
     private TipoGrau grau; // Reflete o domínio "tipo_grau" do banco
     @Convert(converter = TipoTurnoConverter.class)
-    @Column(name = "turno", unique = true)
+    @Column(name = "turno", unique = true, nullable = false)
     private TipoTurno turno; // Reflete o domínio "tipo_turno" do banco
     @Column(name = "campus", unique = true)
     private String campus;

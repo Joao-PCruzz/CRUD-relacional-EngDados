@@ -87,9 +87,13 @@ public class UsuariosController {
 
             limparFormulario();
             atualizarTabela();
+        } catch (IllegalArgumentException e) {
+            // Erros de validação (ex: nome em branco) - mensagem amigável para o usuário
+            mostrarAlerta("Dados inválidos", e.getMessage());
         } catch (Exception e) {
             System.err.println("Erro ao salvar usuário: " + e.getMessage());
             e.printStackTrace();
+            mostrarAlerta("Erro ao salvar", "Não foi possível salvar o usuário. Verifique os dados informados.");
         }
     }
 
@@ -112,9 +116,21 @@ public class UsuariosController {
 
             limparFormulario();
             atualizarTabela();
+        } catch (IllegalArgumentException e) {
+            mostrarAlerta("Dados inválidos", e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
+            mostrarAlerta("Erro ao atualizar", "Não foi possível atualizar o usuário. Verifique os dados informados.");
         }
+    }
+
+    //Exibe uma janela de alerta para o usuário (erros de validação ou de banco)
+    private void mostrarAlerta(String titulo, String mensagem) {
+        Alert alerta = new Alert(Alert.AlertType.ERROR);
+        alerta.setTitle(titulo);
+        alerta.setHeaderText(null);
+        alerta.setContentText(mensagem);
+        alerta.showAndWait();
     }
 
     //Ação ao clicar no botão deletar

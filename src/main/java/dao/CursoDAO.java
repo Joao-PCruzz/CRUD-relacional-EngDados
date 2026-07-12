@@ -11,8 +11,18 @@ public class CursoDAO extends BaseDAO {
     }
 
     //METHODS
+    private void validarCurso(Curso curso) {
+        if (curso.getNome() == null || curso.getNome().trim().isEmpty()) {
+            throw new IllegalArgumentException("O nome do curso é obrigatório e não pode ficar em branco.");
+        }
+        if (curso.getTurno() == null) {
+            throw new IllegalArgumentException("O turno do curso é obrigatório.");
+        }
+    }
+
     //CREATE
     public void inserirCurso(Curso curso) {
+        validarCurso(curso);
         runInTransaction(em -> em.persist(curso));
         System.out.println("Curso inserido com sucesso.");
     }
@@ -28,6 +38,7 @@ public class CursoDAO extends BaseDAO {
 
     //UPDATE
     public void atualizarCurso(Curso cursoAtualizado) {
+        validarCurso(cursoAtualizado);
         runInTransaction(em -> {
             Curso cursoBanco = em.find(Curso.class, cursoAtualizado.getIdCurso());
             if (cursoBanco != null) {

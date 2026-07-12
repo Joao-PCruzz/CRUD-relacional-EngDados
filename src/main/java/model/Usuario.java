@@ -12,7 +12,7 @@ public class Usuario {
     @Id // Define que este atributo é a Chave Primária (Primary Key) da tabela
     @Column(name = "cpf", columnDefinition = "universidade.tipo_cpf") // Fala sobre o nome da coluna e o seu tipo
     private long cpf; // NUMERIC(13) em Java vira long
-    @Column(name="nome", length=45) // Length define o tamanho máximo da String
+    @Column(name="nome", length=45, nullable = false) // Length define o tamanho máximo da String
     private String nome;
     @Column(name="data_nascimento")
     private LocalDate data_nascimento; // Date vira Local Date

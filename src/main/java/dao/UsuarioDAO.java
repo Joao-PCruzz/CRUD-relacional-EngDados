@@ -11,8 +11,14 @@ public class UsuarioDAO extends BaseDAO{
     }
 
     //METHODS
+    private void validarUsuario(Usuario usuario) {
+        if (usuario.getNome() == null || usuario.getNome().trim().isEmpty()) {
+            throw new IllegalArgumentException("O nome do usuário é obrigatório e não pode ficar em branco.");
+        }
+    }
     // --- CRIAR (CREATE) ---
     public void inserirUsuario(Usuario usuario) {
+        validarUsuario(usuario);
         runInTransaction(em -> em.persist(usuario));
         System.out.println("Usuário inserido com sucesso.");
     }
@@ -29,6 +35,7 @@ public class UsuarioDAO extends BaseDAO{
     // --- ATUALIZAR (UPDATE) ---
     //Esse método é impossibilitado de alterar somente o CPF
     public void atualizarUsuario(Usuario usuarioAtualizado) {
+        validarUsuario(usuarioAtualizado); 
        runInTransaction(em -> {
            Usuario usuarioBanco = em.find(Usuario.class, usuarioAtualizado.getCpf());
            if (usuarioBanco != null) {

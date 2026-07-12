@@ -41,6 +41,7 @@ public abstract class BaseDAO { //A classe abstrata BaseDAO reúne interfaces e 
             }
             System.err.println("Erro na operação de banco de dados.");
             e.printStackTrace();
+            throw new RuntimeException(e.getMessage(), e);
         } finally {
             em.close();
         }

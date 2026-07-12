@@ -1,6 +1,7 @@
 package controller;
 
 import dao.CursoDAO;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import model.Curso;
@@ -90,9 +91,12 @@ public class CursosController {
             limparFormulario();
             atualizarTabela();
             System.out.println("Novo curso cadastrado com sucesso!");
+        } catch (IllegalArgumentException e) {
+            mostrarAlerta("Dados inválidos", e.getMessage());
         } catch (Exception e) {
             System.err.println("Erro ao salvar curso: " + e.getMessage());
             e.printStackTrace();
+            mostrarAlerta("Erro ao salvar", "Não foi possível salvar o curso. Verifique os dados informados.");
         }
     }
 
@@ -113,10 +117,21 @@ public class CursosController {
             limparFormulario();
             atualizarTabela();
             System.out.println("Curso atualizado com sucesso!");
+        } catch (IllegalArgumentException e) {
+            mostrarAlerta("Dados inválidos", e.getMessage());
         } catch (Exception e) {
             System.err.println("Erro ao atualizar curso: " + e.getMessage());
             e.printStackTrace();
+            mostrarAlerta("Erro ao atualizar", "Não foi possível atualizar o curso. Verifique os dados informados.");
         }
+    }
+
+    private void mostrarAlerta(String titulo, String mensagem) {
+        Alert alerta = new Alert(Alert.AlertType.ERROR);
+        alerta.setTitle(titulo);
+        alerta.setHeaderText(null);
+        alerta.setContentText(mensagem);
+        alerta.showAndWait();
     }
 
     //Ação ao clicar no botão deletar
