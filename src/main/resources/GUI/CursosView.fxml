@@ -50,7 +50,7 @@
                         <VBox spacing="5.0">
                             <children>
                                 <Label text="ID do Curso" textFill="#555555" />
-                                <TextField fx:id="txtIdCurso" prefHeight="30.0" promptText="Código numérico" />
+                                <TextField fx:id="txtIdCurso" prefHeight="30.0" promptText="Código numérico atuogerado" />
                             </children>
                         </VBox>
 

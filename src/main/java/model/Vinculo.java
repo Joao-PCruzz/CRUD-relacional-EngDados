@@ -8,6 +8,7 @@ import model.enums.StatusEstudante;
 @Table(name = "Vinculo", schema = "universidade")
 public class Vinculo {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idVinculo")
     private Integer idVinculo;
     @Column(name = "data_entrada")

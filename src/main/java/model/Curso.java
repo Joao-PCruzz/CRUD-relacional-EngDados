@@ -9,24 +9,25 @@ import model.enums.TipoNivel;
 import model.enums.TipoTurno;
 
 @Entity
-@Table(name = "Curso", schema = "universidade")
+@Table(name = "Curso", schema = "universidade", uniqueConstraints = @UniqueConstraint(columnNames = {"nome", "turno", "campus", "nivel"}))
 public class Curso{
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idCurso")
     private Integer idCurso;
-    @Column(name = "nome", unique = true, nullable = false)
+    @Column(name = "nome", nullable = false)
     private String nome;
     @Convert(converter = TipoGrauConverter.class)
     @Column(name = "grau")
     private TipoGrau grau; // Reflete o domínio "tipo_grau" do banco
     @Convert(converter = TipoTurnoConverter.class)
-    @Column(name = "turno", unique = true, nullable = false)
+    @Column(name = "turno", nullable = false)
     private TipoTurno turno; // Reflete o domínio "tipo_turno" do banco
-    @Column(name = "campus", unique = true)
+    @Column(name = "campus")
     private String campus;
     @Convert(converter = TipoNivelConverter.class)
-    @Column(name = "nivel", unique = true)
+    @Column(name = "nivel")
     private TipoNivel nivel; // Reflete o domínio "tipo_nivel" do banco
 
     //Constrututores

@@ -53,6 +53,7 @@ public class CursosController {
         EntityManagerFactory emf = JPAUtil.getEntityManagerFactory();
         this.cursoDAO = new CursoDAO(emf);
 
+        txtIdCurso.setEditable(false);
         colIdCurso.setCellValueFactory(new PropertyValueFactory<>("idCurso"));
         colNomeCurso.setCellValueFactory(new PropertyValueFactory<>("nome"));
         colGrau.setCellValueFactory(new PropertyValueFactory<>("grau"));
@@ -79,7 +80,6 @@ public class CursosController {
     private void handleSalvarCurso() {
         try {
             Curso curso = new Curso();
-            curso.setIdCurso(Integer.parseInt(txtIdCurso.getText()));
             curso.setNome(txtNomeCurso.getText());
             curso.setGrau(cbGrau.getValue());
             curso.setTurno(cbTurno.getValue());

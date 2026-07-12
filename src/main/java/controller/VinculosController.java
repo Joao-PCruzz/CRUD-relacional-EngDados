@@ -58,6 +58,7 @@ public class VinculosController {
         this.estudanteDAO = new EstudanteDAO(emf);
         this.cursoDAO = new CursoDAO(emf);
 
+        txtIdVinculo.setEditable(false);
         colIdVinculo.setCellValueFactory(new PropertyValueFactory<>("idVinculo"));
         colDataEntrada.setCellValueFactory(new PropertyValueFactory<>("data_entrada"));
         colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
@@ -84,7 +85,6 @@ public class VinculosController {
     private void handleSalvarVinculo() {
         try {
             Vinculo vinculo = new Vinculo();
-            vinculo.setIdVinculo(Integer.parseInt(txtIdVinculo.getText()));
             vinculo.setData_entrada(dpDataEntrada.getValue());
             vinculo.setStatus(cbStatus.getValue());
             vinculo.setData_saida(dpDataSaida.getValue());

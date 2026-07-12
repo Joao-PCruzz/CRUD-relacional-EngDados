@@ -51,7 +51,7 @@
                         <VBox spacing="4.0">
                             <children>
                                 <Label text="ID do Vínculo" textFill="#555555" />
-                                <TextField fx:id="txtIdVinculo" prefHeight="30.0" promptText="Código numérico sequencial" />
+                                <TextField fx:id="txtIdVinculo" prefHeight="30.0" promptText="Código numérico autogerado" />
                             </children>
                         </VBox>
 

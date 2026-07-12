@@ -7,7 +7,7 @@ import jakarta.persistence.*; //Importante para a integração do ORM
 @Table(name = "Estudante", schema = "universidade")
 public class Estudante {
     @Id
-    @Column(name = "mat_estudante", length = 12)
+    @Column(name = "mat_estudante", length = 7)
     private String mat_estudante; //Faz parte do "universidade.matricula"
     @Column(name = "mc")
     private BigDecimal mc; //Para mapear o tipo DECIMAL(2)
