@@ -23,7 +23,10 @@ public class EstudanteDAO extends BaseDAO {
     }
 
     public List<Estudante> consultarEstudantes() { //Método para ler todos os estudantes no banco
-        return runQuery(em -> em.createQuery("SELECT e FROM Estudante e", Estudante.class).getResultList());
+        return runQuery(em -> em.createQuery(
+            //O lEFT JOIN FETCH para fazer ligações entre estudante e usuário a partir do Join, sem perder a integridade das FK's
+            "SELECT e FROM Estudante e LEFT JOIN FETCH e.usuario",
+            Estudante.class).getResultList());
     }
 
     //UPDATE

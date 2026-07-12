@@ -23,7 +23,13 @@ public class VinculoDAO extends BaseDAO{
     }
 
     public List<Vinculo> consultarVinculos() {
-        return runQuery(em -> em.createQuery("SELECT v FROM Vinculo v", Vinculo.class).getResultList());
+            return runQuery(em -> em.createQuery(
+                //O lEFT JOIN FETCH para fazer ligações entre vínculo e as tabelas ligadas a partir do Join, sem perder a integridade das FK's
+                "SELECT v FROM Vinculo v " +
+                "LEFT JOIN FETCH v.estudante est " +
+                "LEFT JOIN FETCH est.usuario " +
+                "LEFT JOIN FETCH v.curso",
+                Vinculo.class).getResultList());
     }
 
     //UPDATE
